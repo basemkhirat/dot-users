@@ -1,14 +1,9 @@
 <?php
 
-namespace Dot\Users\Migrations;
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Hash;
-use Schema;
 use Dot\Users\Models\User;
-use App;
-
 
 class MakeUsersTable extends Migration
 {
