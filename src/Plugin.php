@@ -14,19 +14,6 @@ class Plugin extends \Dot\Platform\Plugin
         "manage"
     ];
 
-    /**
-     * @return array
-     */
-    function info()
-    {
-
-        return [
-            "name" => "users",
-            "version" => "1.0",
-        ];
-
-    }
-
     function boot()
     {
 
