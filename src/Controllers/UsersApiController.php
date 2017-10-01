@@ -2,14 +2,14 @@
 
 namespace Dot\Users\Controllers;
 
-use Illuminate\Http\Request;
+use Dot\Platform\APIController;
 use Dot\Users\Models\User;
-use Dot\ApiController;
+use Illuminate\Http\Request;
 
 /**
  * Class UsersApiController
  */
-class UsersApiController extends ApiController
+class UsersApiController extends APIController
 {
 
     /**
@@ -43,8 +43,8 @@ class UsersApiController extends ApiController
 
         $components = array_filter($request->get("with", []));
 
-        foreach($components as $relation => $data){
-            $components[$relation] = function($query) use ($data){
+        foreach ($components as $relation => $data) {
+            $components[$relation] = function ($query) use ($data) {
                 return $query->orderBy(array_get($data, 'order_by', "id"), array_get($data, 'order_direction', "DESC"));
             };
         }
@@ -114,7 +114,7 @@ class UsersApiController extends ApiController
                 ->where("provider_id", $request->get("provider_id"))
                 ->first();
 
-            if(count($user)) {
+            if (count($user)) {
                 return $this->response($user);
             }
 

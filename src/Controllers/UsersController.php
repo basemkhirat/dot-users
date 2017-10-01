@@ -2,18 +2,18 @@
 
 namespace Dot\Users\Controllers;
 
-use Request;
-use Gate;
-use Dot;
-use View;
-use Auth;
 use Action;
-use Redirect;
+use Auth;
 use Config;
-use Session;
-use Dot\Users\Models\User;
+use Dot;
+use Dot\Platform\Controller;
 use Dot\Roles\Models\Role;
-use Dot\Controller;
+use Dot\Users\Models\User;
+use Gate;
+use Redirect;
+use Request;
+use Session;
+use View;
 
 /**
  * Class UsersController

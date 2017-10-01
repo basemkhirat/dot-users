@@ -2,13 +2,12 @@
 
 namespace Dot\Users;
 
-use Gate;
 use Action;
-use Navigation;
 use Dot\Users\Models\User;
-use Plugin;
+use Gate;
+use Navigation;
 
-class UsersPlugin extends Plugin
+class Plugin extends \Dot\Platform\Plugin
 {
 
     public $permissions = [

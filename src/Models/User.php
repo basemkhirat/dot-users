@@ -10,7 +10,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Dot\Auth\Models\Auth;
 use Hash;
-use Dot\Model;
+use Dot\Platform\Model;
 use Dot\Roles\Models\Role;
 use Dot\Media\Models\Media;
 
