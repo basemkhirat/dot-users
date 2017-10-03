@@ -7,15 +7,17 @@ use Dot\Users\Models\User;
 use Gate;
 use Navigation;
 
-class Plugin extends \Dot\Platform\Plugin
+class Users extends \Dot\Platform\Plugin
 {
 
-    public $permissions = [
+    protected $permissions = [
         "manage"
     ];
 
     function boot()
     {
+
+        parent::boot();
 
         Navigation::menu("sidebar", function ($menu) {
 
@@ -35,8 +37,5 @@ class Plugin extends \Dot\Platform\Plugin
             return view("users::widgets.users", ["users" => $users]);
 
         });
-
-        include __DIR__ . "/routes.php";
-
     }
 }
