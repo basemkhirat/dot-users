@@ -2,48 +2,68 @@
 
 namespace Dot\Users\Models;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Dot\Auth\Models\Auth;
-use Hash;
+use Dot\Media\Models\Media;
 use Dot\Platform\Model;
 use Dot\Roles\Models\Role;
-use Dot\Media\Models\Media;
+use Hash;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 
+/**
+ * Class User
+ * @package Dot\Users\Models
+ */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
 
     use Authenticatable, Authorizable, CanResetPassword;
 
-    protected $module = 'users';
-
+    /**
+     * @var array
+     */
     protected $creatingRules = [
         'username' => 'required|unique:users',
         "email" => "required|email|unique:users",
         "first_name" => "required"
     ];
 
+    /**
+     * @var array
+     */
     protected $updatingRules = [
         "username" => "required|unique:users,username,[id],id",
         "email" => "required|email|unique:users,email,[id],id",
         "first_name" => "required"
     ];
 
+    /**
+     * @var array
+     */
     protected $searchable = [
         "username", "email", "first_name"
     ];
 
+    /**
+     * @var string
+     */
     protected $table = 'users';
 
-    protected $guarded = array('id', "permission");
+    /**
+     * @var array
+     */
+    protected $guarded = ['id', "permission"];
 
-    protected $hidden = array();
-
-
+    /**
+     * Set create validations
+     * @param $v
+     * @return mixed
+     */
     function setCreateValidation($v)
     {
         $v->sometimes(["password", "repassword"], "required|same:repassword", function ($input) {
@@ -53,6 +73,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $v;
     }
 
+
+    /**
+     * Set update validations
+     * @param $v
+     * @return mixed
+     */
     function setUpdateValidation($v)
     {
         $v->sometimes(["password", "repassword"], "required|same:repassword", function ($input) {
@@ -62,6 +88,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $v;
     }
 
+    /**
+     * Set password attribute
+     * @param $password
+     */
     function setPasswordAttribute($password)
     {
         if (trim($password) != "") {
@@ -71,94 +101,93 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
     }
 
+    /**
+     * Set repassword attribute
+     * @param $password
+     */
     function setRepasswordAttribute($password)
     {
         unset($this->attributes["repassword"]);
     }
 
-    public function permissions()
-    {
-        return $this->hasMany('UserPermission', "user_id", "id");
-    }
-
-    public function can($ability, $arguments = [])
-    {
-        $this->access($ability);
-    }
-
-    public function groups()
-    {
-        return $this->belongsToMany('Group', 'users_groups', 'group_id', 'user_id');
-    }
-
+    /**
+     * Name getter
+     * @return mixed|string
+     */
     public function getNameAttribute()
     {
+
         $name = $this->first_name . ' ' . $this->last_name;
 
         if (trim($name) == "") {
-            return $this->username;
+            $name = $this->username;
         }
 
         return $name;
     }
 
-
-    public function getFirstNameAttribute($value)
-    {
-        return ($value) ? $value : '';
-    }
-
-    public function getLastNameAttribute($value)
-    {
-        return ($value) ? $value : '';
-    }
-
+    /**
+     * photo relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function photo()
     {
         return $this->hasOne(Media::class, 'id', 'photo_id');
     }
 
+    /**
+     * Photo url attribute
+     * @return string
+     */
     public function getPhotoUrlAttribute()
     {
-
-        if (Auth::guard(GUARD)->user()->photo) {
-            return thumbnail(Auth::guard(GUARD)->user()->photo->path, "thumbnail", "admin::images/author.png");
+        if ($this->photo) {
+            return thumbnail($this->photo->path, "thumbnail", "admin::images/author.png");
         } else {
             return assets("admin::images/author.png");
         }
     }
 
+    /**
+     * Role relation
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function role()
     {
         return $this->hasOne(Role::class, "id", 'role_id');
     }
 
-    public function scopeRoot($query){
-        $query->where("root", 1);
-    }
-
-
-    public function hasRole($role = "")
+    /**
+     * Check user has specific role
+     * @param $role
+     * @return bool
+     */
+    public function hasRole($role)
     {
-
-        $string = strtolower($role);
-
-        // get authenticated user
-        $user = Auth::guard(GUARD)->user();
-
-        $role_name = "";
-
-        if ($user->role) {
-            $role_name = strtolower($user->role->name);
-        }
-
-        if ($string == $role_name) {
-            return (bool)true;
-        }
-
-        return (bool)false;
+        return strtolower($role) == strtolower($this->role->name);
     }
 
+    /**
+     * Determine if the entity has a given ability.
+     *
+     * @param  string $ability
+     * @param  array|mixed $arguments
+     * @return bool
+     */
+    public function can($ability, $arguments = [])
+    {
+        if (count($arguments) > 0) {
+            return app(Gate::class)->forUser($this)->check($ability, $arguments);
+        }
+
+        return $this->hasAccess($ability);
+    }
+
+    /**
+     * Check user has specific permissions
+     * @param array $params
+     * @return bool
+     */
     public function hasAccess($params = array())
     {
 
@@ -168,7 +197,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         $params = is_array($params) ? $params : func_get_args();
 
-        // get authenticated user
         $user = Auth::guard(GUARD)->user();
 
         $permissions = [];
@@ -197,39 +225,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return false;
     }
 
+    /**
+     * generate API token
+     * @return string
+     */
     function newApiToken()
     {
         return str_random(60);
     }
 
-
-    /*
-
-public static function method($name = false, $callback)
-{
-    Config::set("methods." . $name, $callback);
-}
-
-public function __call($name, $arguments)
-{
-
-    if (Config::has("methods." . $name)) {
-        $callback = Config::get("methods." . $name);
-        return $callback($this);
-    }
-
-    return $this->$name();
-}
-
-
-public function __call($method, $parameters = array())
-{
-    if (starts_with($method, 'isNot') and $method != 'isNot') {
-        return $this->isNot(snake_case(substr($method, 2)));
-    } elseif (starts_with($method, 'is') and $method != 'is') {
-        return $this->is(snake_case(substr($method, 2)));
-    }
-
-    return $method($parameters);
-}*/
 }

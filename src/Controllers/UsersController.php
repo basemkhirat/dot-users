@@ -15,26 +15,27 @@ use Request;
 use Session;
 use View;
 
+
 /**
  * Class UsersController
+ * @package Dot\Users\Controllers
  */
 class UsersController extends Controller
 {
 
     /**
+     * View payload
      * @var array
      */
-    public $data = array();
+    public $data = [];
+
 
     /**
+     * Show all users
      * @return mixed
      */
     public function index()
     {
-
-        if (!Gate::allows("users.manage")) {
-            Dot::forbidden();
-        }
 
         if (Request::isMethod("post")) {
             if (Request::has("action")) {
@@ -46,7 +47,7 @@ class UsersController extends Controller
         }
 
         $this->data["sort"] = (Request::has("sort")) ? Request::get("sort") : "created_at";
-        $this->data["order"] = (Request::has("order")) ? Request::get("order") : "DESC";
+        $this->data["order"] = (Request::has("order")) ? Request::get("order") : "desc";
         $this->data['per_page'] = (Request::has("per_page")) ? Request::get("per_page") : 20;
 
         $query = User::with("role", "photo")->orderBy($this->data["sort"], $this->data["order"]);
@@ -75,37 +76,18 @@ class UsersController extends Controller
         }
 
         $this->data["users"] = $users = $query->paginate($per_page);
-
-        /*
-
-        $customFields = [];
-        foreach($users as $user){
-            $fields = Action::fire("user.table.fields", $user);
-            if(count($fields)){
-                foreach($fields as $field){
-                    $customFields[] = $field;
-                }
-
-            }
-        }
-
-        $this->data["customFields"] = $customFields;
-        */
-
         $this->data["roles"] = Role::all();
 
         return View::make("users::show", $this->data);
     }
 
+
     /**
-     * @return string
+     * Create a new user
+     * @return mixed
      */
     public function create()
     {
-
-        if (!Gate::allows("users.manage")) {
-            Dot::forbidden();
-        }
 
         if (Request::isMethod("post")) {
 
@@ -129,7 +111,8 @@ class UsersController extends Controller
             $user->google_plus = Request::get("google_plus");
             $user->backend = 1;
 
-            // Fire user creating action
+            // Fire saving action
+
             Action::fire("user.saving", $user);
 
             if (!$user->validate()) {
@@ -138,7 +121,8 @@ class UsersController extends Controller
 
             $user->save();
 
-            // Fire user created action
+            // Fire saved action
+
             Action::fire("user.saved", $user);
 
             return Redirect::route("admin.users.edit", array("id" => $user->id))
@@ -152,23 +136,23 @@ class UsersController extends Controller
         return View::make("users::edit", $this->data);
     }
 
+
     /**
+     * Edit user by id
      * @param $user_id
      * @return mixed
      */
     public function edit($user_id)
     {
 
-        if (Auth::user()->id != $user_id) {
-            if (!Gate::allows("users.manage")) {
-                Dot::forbidden();
-            }
-        }
-
         $user = User::with("photo")->where("id", $user_id)->first();
 
         if (count($user) == 0) {
             abort(404);
+        }
+
+        if(!Auth::user()->can("users.update", $user)){
+            abort(403);
         }
 
         if (Request::isMethod("post")) {
@@ -190,7 +174,8 @@ class UsersController extends Controller
             $user->linked_in = Request::get("linked_in");
             $user->google_plus = Request::get("google_plus");
 
-            // Fire user creating action
+            // Fire saving action
+
             Action::fire("user.saving", $user);
 
             if (!$user->validate()) {
@@ -206,7 +191,8 @@ class UsersController extends Controller
                 }
             }
 
-            // Fire user updated action
+            // Fire saved action
+
             Action::fire("user.saved", $user);
 
             return Redirect::route("admin.users.edit", array("id" => $user->id))
@@ -220,103 +206,34 @@ class UsersController extends Controller
         return View::make("users::edit", $this->data);
     }
 
-    /**
-     * @return string
-     */
-    function search()
-    {
-        $data = User::search(urldecode(Request::get("term")))
-            ->take(6)
-            ->get();
-        return json_encode($data);
-    }
 
     /**
-     * @return string
+     * Delete user by id
+     * @return mixed
      */
     public function delete()
     {
 
-        if (!Gate::allows("users.manage")) {
-            Dot::forbidden();
-        }
-
         $ids = Request::get("id");
-        if (!is_array($ids)) {
-            $ids = array($ids);
-        }
+
+        $ids = is_array($ids) ? $ids : [$ids];
 
         foreach ($ids as $ID) {
+
             $user = User::findOrFail($ID);
 
-            // Fire user deleting action
+            // Fire deleting action
+
             Action::fire("user.deleting", $user);
 
             $user->delete();
 
-            // Fire user deleted action
+            // Fire deleted action
+
             Action::fire("user.deleted", $user);
         }
+
         return Redirect::back()->with("message", trans("users::users.events.deleted"));
     }
-
-    function gradient($w = 100, $h = 100, $c = array('#FFFFFF', '#FF0000', '#00FF00', '#0000FF'), $hex = true)
-    {
-
-        /*
-        Generates a gradient image
-
-        Author: Christopher Kramer
-
-        Parameters:
-        w: width in px
-        h: height in px
-        c: color-array with 4 elements:
-            $c[0]:   top left color
-            $c[1]:   top right color
-            $c[2]:   bottom left color
-            $c[3]:   bottom right color
-
-        if $hex is true (default), colors are hex-strings like '#FFFFFF' (NOT '#FFF')
-        if $hex is false, a color is an array of 3 elements which are the rgb-values, e.g.:
-        $c[0]=array(0,255,255);
-
-        */
-
-        $im = imagecreatetruecolor($w, $h);
-
-        if ($hex) {  // convert hex-values to rgb
-            for ($i = 0; $i <= 3; $i++) {
-                $c[$i] = $this->hex2rgb($c[$i]);
-            }
-        }
-
-        $rgb = $c[0]; // start with top left color
-        for ($x = 0; $x <= $w; $x++) { // loop columns
-            for ($y = 0; $y <= $h; $y++) { // loop rows
-                // set pixel color
-                $col = imagecolorallocate($im, $rgb[0], $rgb[1], $rgb[2]);
-                imagesetpixel($im, $x - 1, $y - 1, $col);
-                // calculate new color
-                for ($i = 0; $i <= 2; $i++) {
-                    $rgb[$i] =
-                        $c[0][$i] * (($w - $x) * ($h - $y) / ($w * $h)) +
-                        $c[1][$i] * ($x * ($h - $y) / ($w * $h)) +
-                        $c[2][$i] * (($w - $x) * $y / ($w * $h)) +
-                        $c[3][$i] * ($x * $y / ($w * $h));
-                }
-            }
-        }
-        return $im;
-    }
-
-    function hex2rgb($hex)
-    {
-        $rgb[0] = hexdec(substr($hex, 1, 2));
-        $rgb[1] = hexdec(substr($hex, 3, 2));
-        $rgb[2] = hexdec(substr($hex, 5, 2));
-        return ($rgb);
-    }
-
 
 }

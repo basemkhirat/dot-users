@@ -3,15 +3,28 @@
 /*
  * WEB
  */
+
 Route::group([
+
     "prefix" => ADMIN,
+
     "middleware" => ["web", "auth"]
+
 ], function ($route) {
+
     $route->group(["prefix" => "users"], function ($route) {
-        $route->any('/', array("as" => "admin.users.show", "uses" => "Dot\Users\Controllers\UsersController@index"));
-        $route->any('/create', array("as" => "admin.users.create", "uses" => "Dot\Users\Controllers\UsersController@create"));
+
+        $route->any('/', array("as" => "admin.users.show", "uses" => "Dot\Users\Controllers\UsersController@index"))
+            ->middleware('can:users.show');
+
+        $route->any('/create', array("as" => "admin.users.create", "uses" => "Dot\Users\Controllers\UsersController@create"))
+            ->middleware('can:users.create');
+
         $route->any('/{id}/edit', array("as" => "admin.users.edit", "uses" => "Dot\Users\Controllers\UsersController@edit"));
-        $route->any('/delete', array("as" => "admin.users.delete", "uses" => "Dot\Users\Controllers\UsersController@delete"));
+
+        $route->any('/delete', array("as" => "admin.users.delete", "uses" => "Dot\Users\Controllers\UsersController@delete"))
+            ->middleware('can:users.delete');
+
         $route->any('/search', array("as" => "admin.users.search", "uses" => "Dot\Users\Controllers\UsersController@search"));
     });
 

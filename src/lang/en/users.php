@@ -48,28 +48,20 @@ return [
 
     "recent_users" => "Latest Users",
     "show_all" => "show all",
-
-
     'sort_by' => 'Sort by',
-    'asc' => 'ASC',
-    'desc' => 'DESC',
+    'asc' => 'Ascending',
+    'desc' => 'Descending',
     'order' => 'order',
     'all' => 'All',
     'all_roles' => "All roles",
     'filter' => 'view',
-
     "no_records" => "No users",
-
     'deactivated' => 'Deactivated',
     'activated' => 'Activated',
-
-
     "back_to_users" => "Back to users",
-
     "color" => "Color",
     "color_green" => "Green",
     "color_blue" => "Blue",
-
 
     "module" => "Users",
 

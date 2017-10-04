@@ -7,27 +7,33 @@
 
             <h2>
                 <i class="fa fa-users"></i>
-                <?php echo trans("users::users.users") ?>
+                {{ trans("users::users.users") }}
             </h2>
 
             <ol class="breadcrumb">
                 <li>
-                    <a href="<?php echo route("admin"); ?>"><?php echo trans("admin::common.admin") ?></a>
+                    <a href="{{ route("admin") }}">{{trans("admin::common.admin") }}</a>
                 </li>
                 <li>
-                    <a href="<?php echo route("admin.users.show"); ?>">
-                        <?php echo trans("users::users.users") ?>
-                        (<?php echo $users->total() ?>)</a>
+                    <a href="{{ route("admin.users.show") }}">
+                        {{ trans("users::users.users") }}
+                        ({{ $users->total() }})</a>
                 </li>
             </ol>
 
         </div>
 
         <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12 text-right">
-            <?php if (Gate::allows("users.create")) { ?>
-            <a href="<?php echo route("admin.users.create"); ?>" class="btn btn-primary btn-labeled btn-main"> <span
-                    class="btn-label icon fa fa-plus"></span> <?php echo trans("users::users.add_new") ?></a>
-            <?php } ?>
+
+            @can("users.create")
+
+                <a href="{{ route("admin.users.create") }}" class="btn btn-primary btn-labeled btn-main">
+                    <span class="btn-label icon fa fa-plus"></span>
+                    {{ trans("users::users.add_new") }}
+                </a>
+
+            @endcan
+
         </div>
 
     </div>
@@ -39,61 +45,66 @@
             @include("admin::partials.messages")
 
             <form action="" method="get" class="filter-form">
-                <input type="hidden" name="per_page" value="<?php echo Request::get('per_page') ?>"/>
+
+                <input type="hidden" name="per_page" value="{{ Request::get('per_page') }}"/>
+
                 <div class="row">
                     <div class="col-lg-4 col-md-4">
                         <div class="form-group">
+
                             <select name="sort" class="form-control chosen-select chosen-rtl">
-                                <option
-                                    value="first_name"
-                                    <?php if ($sort == "first_name") { ?> selected='selected' <?php } ?>><?php echo trans("users::users.attributes.first_name"); ?></option>
-                                <option
-                                    value="created_at"
-                                    <?php if ($sort == "created_at") { ?> selected='selected' <?php } ?>><?php echo trans("users::users.attributes.created_at"); ?></option>
+
+                                @foreach(['created_at', 'first_name'] as $field)
+                                    <option value="{{ $field }}" {{ $sort == $field ? 'selected="selected"' : '' }}>{{ trans("users::users.attributes.".$field) }}</option>
+                                @endforeach
+
                             </select>
-                            <select name="order" class="form-control chosen-select chosen-rtl ">
-                                <option
-                                    value="DESC"
-                                    <?php if ($order == "DESC") { ?> selected='selected' <?php } ?>><?php echo trans("users::users.desc"); ?></option>
-                                <option
-                                    value="ASC"
-                                    <?php if ($order == "ASC") { ?> selected='selected' <?php } ?>><?php echo trans("users::users.asc"); ?></option>
+
+                            <select name="order" class="form-control chosen-select chosen-rtl">
+
+                                @foreach(['asc', 'desc'] as $direction)
+                                    <option value="{{ $direction }}" {{  $order == $direction ? 'selected="selected"' : '' }}>{{ trans("users::users.".$direction) }}</option>
+                                @endforeach
+
                             </select>
+
                             <button type="submit"
-                                    class="btn btn-primary"><?php echo trans("users::users.order"); ?></button>
+                                    class="btn btn-primary">{{ trans("users::users.order") }}</button>
+
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4">
                         <div class="form-group">
 
                             <select name="status" class="form-control chosen-select chosen-rtl">
-                                <option value=""><?php echo trans("users::users.all"); ?></option>
-                                <option <?php if (Request::get("status") == "1") { ?> selected='selected' <?php } ?>
-                                value="1"><?php echo trans("users::users.activated"); ?></option>
-                                <option <?php if (Request::get("status") == "0") { ?> selected='selected' <?php } ?>
-                                value="0"><?php echo trans("users::users.deactivated"); ?></option>
+                                <option value="">{{ trans("users::users.all") }}</option>
+                                <option {{  Request::get("status") == "1" ? 'selected="selected"' : '' }}
+                                        value="1">{{ trans("users::users.activated") }}</option>
+                                <option {{ Request::get("status") == "0" ? 'selected="selected"' : '' }}
+                                        value="0">{{ trans("users::users.deactivated") }}</option>
                             </select>
 
                             <select name="role_id" class="form-control chosen-select chosen-rtl">
-                                <option value=""><?php echo trans("users::users.all_roles"); ?></option>
-                                <?php foreach ($roles as $role) { ?>
-                                <option <?php if ($role->id == Request::get("role_id")) { ?> selected='selected'
-                                        <?php } ?>
-                                        value="<?php echo $role->id; ?>"><?php echo $role->name ?></option>
-                                <?php } ?>
+
+                                <option value="">{{ trans("users::users.all_roles") }}</option>
+
+                                @foreach ($roles as $role)
+                                    <option {{ $role->id == Request::get("role_id") ? 'selected="selected"' : '' }}
+                                            value="{{ $role->id }}">{{ $role->name }}</option>
+                                @endforeach
                             </select>
 
                             <button type="submit"
-                                    class="btn btn-primary"><?php echo trans("users::users.filter"); ?></button>
+                                    class="btn btn-primary">{{ trans("users::users.filter") }}</button>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-4">
                         <form action="" method="get" class="search_form">
                             <div class="input-group">
-                                <input name="q" value="<?php echo Request::get("q"); ?>" type="text"
+                                <input name="q" value="{{ Request::get("q") }}" type="text"
                                        class=" form-control"
-                                       placeholder="<?php echo trans("users::users.search_users") ?> ...">
+                                       placeholder="{{ trans("users::users.search_users") }} ...">
                                 <span class="input-group-btn">
                             <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
                         </span>
@@ -103,153 +114,177 @@
                 </div>
             </form>
 
-            <form action="" method="post" class="action_form">
-                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>"/>
+            <form method="post" class="action_form">
+
+                <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+
                 <div class="ibox float-e-margins">
+
                     <div class="ibox-title">
-                        <h5> <?php echo trans("users::users.users") ?> </h5>
+                        <h5> {{ trans("users::users.users") }} </h5>
                     </div>
+
                     <div class="ibox-content">
 
-                        <?php if (count($users)) { ?>
+                        @if (count($users))
 
-                        <div class="row">
-                            <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12 action-box">
-                                <select name="action" class="form-control pull-left">
-                                    <option value="-1"
-                                            selected="selected"><?php echo trans("users::users.bulk_actions"); ?></option>
-                                    <option value="delete"><?php echo trans("users::users.delete"); ?></option>
-                                </select>
-                                <button type="submit"
-                                        class="btn btn-primary pull-right"><?php echo trans("users::users.apply"); ?></button>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12 action-box">
+
+                                    <select name="action" class="form-control pull-left">
+
+                                        <option value="-1"
+                                                selected="selected">{{ trans("users::users.bulk_actions") }}</option>
+
+                                        @can("users.delete")
+                                            <option value="delete">{{ trans("users::users.delete") }}</option>
+                                        @endcan
+
+                                    </select>
+
+                                    <button type="submit"
+                                            class="btn btn-primary pull-right">{{ trans("users::users.apply") }}</button>
+
+                                </div>
+
+                                <div class="col-lg-6 col-md-4 hidden-sm hidden-xs"></div>
+
+                                <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+                                    <select class="pull-left form-control per_page_filter">
+
+                                        <option value="" selected="selected">
+                                            -- {{ trans("users::users.per_page") }} --
+                                        </option>
+
+                                        @foreach([10, 20, 30, 40] as $num)
+                                            <option value="{{ $num }}" {{ $num == $per_page ? 'selected="selected"' : '' }}>{{ $num }}</option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+
                             </div>
 
-                            <div class="col-lg-6 col-md-4 hidden-sm hidden-xs"></div>
+                            <div class="table-responsive">
 
-                            <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-                                <select class="pull-left form-control per_page_filter">
-                                    <option value="" selected="selected">
-                                        -- <?php echo trans("users::users.per_page") ?> --
-                                    </option>
-                                    <?php foreach (array(10, 20, 30, 40) as $num) { ?>
-                                    <option
-                                        value="<?php echo $num; ?>"
-                                        <?php if ($num == $per_page) { ?> selected="selected" <?php } ?>><?php echo $num; ?></option>
-                                    <?php } ?>
-                                </select>
+                                <table cellpadding="0" cellspacing="0" border="0"
+                                       class="table table-striped table-hover">
+
+                                    <thead>
+                                    <tr>
+
+                                        <th style="width:35px"><input type="checkbox" class="i-checks check_all"
+                                                                      name="ids[]"/>
+                                        </th>
+                                        <th style="width:50px">{{ trans("users::users.photo") }}</th>
+                                        <th>{{ trans("users::users.name") }}</th>
+                                        <th>{{ trans("users::users.email") }}</th>
+                                        <th>{{ trans("users::users.created") }}</th>
+                                        <th>{{ trans("users::users.role") }}</th>
+                                        <th>{{ trans("users::users.actions") }}</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    @foreach ($users as $user)
+
+                                        <tr>
+
+                                            <td>
+                                                <input type="checkbox" class="i-checks" name="id[]"
+                                                       value="{{ $user->id }}"/>
+                                            </td>
+
+                                            <td>
+
+                                                @if($user->photo)
+                                                    <img class="img-rounded" style="width:50px"
+                                                         src="{{ thumbnail($user->photo->path) }}"/>
+                                                @else
+                                                    <img class="img-rounded"
+                                                         src="{{ assets("admin::images/user.png") }}"/>
+                                                @endif
+                                            </td>
+
+                                            <td>
+
+                                                @can("users.update", $user)
+                                                    <a class="text-navy"
+                                                       href="{{ URL::to(ADMIN) }}/users/{{ $user->id }}/edit">
+                                                        <strong> {{ $user->name }} </strong>
+                                                    </a>
+                                                @else
+                                                    <strong> {{ $user->name }} </strong>
+                                                @endcan
+
+                                            </td>
+
+                                            <td>
+                                                <small>
+                                                    {{ empty($user->email) == "" ? $user->email: "-" }}
+                                                </small>
+                                            </td>
+
+                                            <td>
+                                                <small>
+                                                    {{ $user->created_at->render() }}
+                                                </small>
+                                            </td>
+
+                                            <td>
+                                                <small>
+                                                    {{ empty($user->role->name) == "" ? $user->role->name: "-" }}
+                                                </small>
+                                            </td>
+
+                                            <td class="center">
+
+                                                @can("users.update", $user)
+
+                                                    <a href="{{ URL::to(ADMIN) }}/users/{{ $user->id }}/edit">
+                                                        <i class="fa fa-pencil text-navy"></i>
+                                                    </a>
+
+                                                @endcan
+
+                                                @can("users.delete", $user)
+
+                                                    <a class="delete_user ask"
+                                                       message="{{ trans("users::users.sure_delete") }}"
+                                                       href="{{ route("admin.users.delete", array("id" => $user->id)) }}">
+                                                        <i class="fa fa-times text-navy"></i>
+                                                    </a>
+
+                                                @endcan
+
+                                            </td>
+                                        </tr>
+
+                                    @endforeach
+
+                                    </tbody>
+                                </table>
                             </div>
 
-                        </div>
+                            <div class="row">
 
-                        <div class="table-responsive">
+                                <div class="col-lg-12 text-center">
+                                    {{ trans("users::users.page") }}
+                                    {{ $users->currentPage() }}
+                                    {{ trans("users::users.of") }}
+                                    {{ $users->lastPage() }}
+                                </div>
 
-                            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-hover">
-                                <thead>
-                                <tr>
+                                <div class="col-lg-12 text-center">
+                                    {{ $users->appends(Request::all())->render() }}
+                                </div>
 
-                                    <th style="width:35px"><input type="checkbox" class="i-checks check_all"
-                                                                  name="ids[]"/>
-                                    </th>
-                                    <th style="width:50px"><?php echo trans("users::users.photo") ?></th>
-                                    <th><?php echo trans("users::users.name"); ?></th>
-                                    <th><?php echo trans("users::users.email"); ?></th>
-                                    <th><?php echo trans("users::users.created"); ?></th>
-                                    <th><?php echo trans("users::users.role"); ?></th>
-                                    <th><?php echo trans("users::users.actions") ?></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php $i = 0;
-                                foreach ($users as $user) { ?>
-                                <tr>
-
-                                    <td>
-                                        <input type="checkbox" class="i-checks" name="id[]"
-                                               value="<?php echo $user->id; ?>"/>
-                                    </td>
-
-                                    <td>
-                                        <?php if ($user->photo) { ?>
-                                        <img class="img-rounded" style="width:50px"
-                                             src="<?php echo thumbnail($user->photo->path) ?>"/>
-                                        <?php } else { ?>
-                                        <img class="img-rounded"
-                                             src="<?php echo assets("admin::images/user.png"); ?>"/>
-                                        <?php } ?>
-                                    </td>
-
-                                    <td>
-
-                                        <a class="text-navy"
-                                           href="<?php echo URL::to(ADMIN) ?>/users/<?php echo $user->id; ?>/edit">
-                                            <strong> <?php echo $user->name; ?> </strong>
-                                        </a>
-
-                                    </td>
-
-                                    <td>
-                                        <small>
-                                            <?php if ($user->email == "") { ?>
-                                            -
-                                            <?php } else { ?>
-                                                <?php echo $user->email; ?>
-                                            <?php } ?>
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        <small>
-                                            <?php echo $user->created_at->render(); ?>
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        <small>
-                                            <?php if ($user->role) { ?>
-                                                <?php echo $user->role->name; ?>
-                                            <?php } else { ?>
-                                            -
-                                            <?php } ?>
-                                        </small>
-                                    </td>
-
-                                    <td class="center">
-
-                                        <a href="<?php echo URL::to(ADMIN) ?>/users/<?php echo $user->id; ?>/edit">
-                                            <i class="fa fa-pencil text-navy"></i>
-                                        </a>
-
-                                        <a class="delete_user ask"
-                                           message="<?php echo trans("users::users.sure_delete") ?>"
-                                           href="<?php echo URL::route("admin.users.delete", array("id" => $user->id)) ?>">
-                                            <i class="fa fa-times text-navy"></i>
-                                        </a>
-
-                                    </td>
-                                </tr>
-                                <?php $i++;
-                                } ?>
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-12 text-center">
-                                <?php echo trans("users::users.page"); ?>
-                                <?php echo $users->currentPage() ?>
-                                <?php echo trans("users::users.of") ?>
-                                <?php echo $users->lastPage() ?>
-                            </div>
-                            <div class="col-lg-12 text-center">
-                                <?php echo $users->appends(Request::all())->render(); ?>
                             </div>
 
-                        </div>
-
-                        <?php } else { ?>
-                    <?php echo trans("users::users.no_records"); ?>
-                <?php } ?>
+                        @else
+                            {{ trans("users::users.no_records") }}
+                        @endif
 
                     </div>
                 </div>
@@ -294,6 +329,7 @@
             });
 
             $(".filter-form input[name=per_page]").val($(".per_page_filter").val());
+
             $(".per_page_filter").change(function () {
                 var base = $(this);
                 var per_page = base.val();
@@ -302,6 +338,7 @@
             });
 
         });
+
     </script>
 
 @endpush
