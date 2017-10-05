@@ -8,7 +8,10 @@
 
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 
-                <h2>{{ trans("users::users.edit") }}</h2>
+                <h2>
+                    <i class="fa fa-users"></i>
+                    {{ trans("users::users.edit") }}
+                </h2>
 
                 <ol class="breadcrumb">
                     <li>
@@ -181,10 +184,10 @@
                             @else
 
                                 <input type="hidden" name="role_id"
-                                       value="{{  $user->id ? $user->id : 0 }}"/>
+                                       value="{{ $user->id or 0 }}"/>
 
                                 <input type="hidden" name="status"
-                                       value="{{  $user->status ? $user->status : 0 }}"/>
+                                       value="{{ $user->status or 0 }}"/>
 
                             @endcan
 
@@ -195,7 +198,7 @@
                                     <select class="form-control select2 chosen-rtl" name="lang">
 
                                         @foreach (config("admin.locales") as $code => $lang)
-                                            <option {{  ($user and $code == $user->lang) ? 'selected="selected"' : '' }}
+                                            <option {{  ((($user and $code == $user->lang) or (!$user and $code == app()->getLocale()))) ? 'selected="selected"' : '' }}
                                                     value="{{ $code }}">{{ $lang["title"] }}</option>
                                         @endforeach
 
