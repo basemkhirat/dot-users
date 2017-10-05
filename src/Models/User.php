@@ -2,7 +2,7 @@
 
 namespace Dot\Users\Models;
 
-use Dot\Auth\Models\Auth;
+use Illuminate\Support\Facades\Auth;
 use Dot\Media\Models\Media;
 use Dot\Platform\Model;
 use Dot\Roles\Models\Role;

@@ -12,8 +12,8 @@
 
     "require": {
         "dot/platform": "0.4.*",
-        "dot/auth": "*",
-        "dot/roles": "*"
+        "dot/auth": "dev-master",
+        "dot/roles": "dev-master"
     },
 
     "autoload": {
