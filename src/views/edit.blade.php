@@ -2,7 +2,7 @@
 
 @section("content")
 
-    <form action="" method="post">
+    <form method="post">
 
         <div class="row wrapper border-bottom white-bg page-heading">
 
