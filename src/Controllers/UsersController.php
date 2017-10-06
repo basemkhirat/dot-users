@@ -151,7 +151,7 @@ class UsersController extends Controller
             abort(404);
         }
 
-        if(!Auth::user()->can("users.update", $user)){
+        if(!Auth::user()->can("users.edit", $user)){
             abort(403);
         }
 
@@ -222,15 +222,18 @@ class UsersController extends Controller
 
             $user = User::findOrFail($ID);
 
-            // Fire deleting action
+            if(!Auth::user()->can("users.delete", $user)) {
 
-            Action::fire("user.deleting", $user);
+                // Fire deleting action
 
-            $user->delete();
+                Action::fire("user.deleting", $user);
 
-            // Fire deleted action
+                $user->delete();
 
-            Action::fire("user.deleted", $user);
+                // Fire deleted action
+
+                Action::fire("user.deleted", $user);
+            }
         }
 
         return Redirect::back()->with("message", trans("users::users.events.deleted"));

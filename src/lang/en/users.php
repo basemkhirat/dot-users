@@ -66,7 +66,10 @@ return [
     "module" => "Users",
 
     "permissions" => [
-        "manage" => "Manage users"
+        "show" => "Show users",
+        "create" => "Create users",
+        "edit" => "Edit users",
+        "delete" => "Delete users",
     ],
 
     "attributes" => [

@@ -64,9 +64,11 @@ return [
     "recent_users" => "آخر الأعضاء",
     "show_all" => "عرض الكل",
 
-
     "permissions" => [
-        "manage" => "التحكم بالأعضاء"
+        "show" => "عرض الأعضاء",
+        "create" => "إضافة الأعضاء",
+        "edit" => "تحديث الأعضاء",
+        "delete" => "حذف الأعضاء",
     ],
 
     "attributes" => [

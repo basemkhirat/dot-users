@@ -5,27 +5,20 @@
  */
 
 Route::group([
-
     "prefix" => ADMIN,
-
-    "middleware" => ["web", "auth"]
-
+    "middleware" => ["web", "auth:backend"],
+    "namespace" => "Dot\\Users\\Controllers"
 ], function ($route) {
 
     $route->group(["prefix" => "users"], function ($route) {
-
-        $route->any('/', array("as" => "admin.users.show", "uses" => "Dot\Users\Controllers\UsersController@index"))
+        $route->any('/', ["as" => "admin.users.show", "uses" => "UsersController@index"])
             ->middleware('can:users.show');
-
-        $route->any('/create', array("as" => "admin.users.create", "uses" => "Dot\Users\Controllers\UsersController@create"))
+        $route->any('/create', ["as" => "admin.users.create", "uses" => "UsersController@create"])
             ->middleware('can:users.create');
-
-        $route->any('/{id}/edit', array("as" => "admin.users.edit", "uses" => "Dot\Users\Controllers\UsersController@edit"));
-
-        $route->any('/delete', array("as" => "admin.users.delete", "uses" => "Dot\Users\Controllers\UsersController@delete"))
+        $route->any('/{id}/edit', ["as" => "admin.users.edit", "uses" => "UsersController@edit"]);
+        $route->any('/delete', ["as" => "admin.users.delete", "uses" => "UsersController@delete"])
             ->middleware('can:users.delete');
-
-        $route->any('/search', array("as" => "admin.users.search", "uses" => "Dot\Users\Controllers\UsersController@search"));
+        $route->any('/search', ["as" => "admin.users.search", "uses" => "UsersController@search"]);
     });
 
 });
@@ -35,12 +28,13 @@ Route::group([
  */
 Route::group([
     "prefix" => API,
-    "middleware" => ["auth:api"]
+    "middleware" => ["auth:api"],
+    "namespace" => "Dot\\Users\\Controllers"
 ], function ($route) {
-    $route->get("/users/show", "Dot\Users\Controllers\UsersApiController@show");
-    $route->post("/users/create", "Dot\Users\Controllers\UsersApiController@create");
-    $route->post("/users/update", "Dot\Users\Controllers\UsersApiController@update");
-    $route->post("/users/destroy", "Dot\Users\Controllers\UsersApiController@destroy");
+    $route->get("/users/show", "UsersApiController@show");
+    $route->post("/users/create", "UsersApiController@create");
+    $route->post("/users/update", "UsersApiController@update");
+    $route->post("/users/destroy", "UsersApiController@destroy");
 });
 
 

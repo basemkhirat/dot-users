@@ -209,7 +209,7 @@
 
                                             <td>
 
-                                                @can("users.update", $user)
+                                                @can("users.edit", $user)
                                                     <a class="text-navy"
                                                        href="{{ URL::to(ADMIN) }}/users/{{ $user->id }}/edit">
                                                         <strong> {{ $user->name }} </strong>
@@ -240,7 +240,7 @@
 
                                             <td class="center">
 
-                                                @can("users.update", $user)
+                                                @can("users.edit", $user)
 
                                                     <a href="{{ URL::to(ADMIN) }}/users/{{ $user->id }}/edit">
                                                         <i class="fa fa-pencil text-navy"></i>
