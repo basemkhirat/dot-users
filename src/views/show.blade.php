@@ -92,6 +92,7 @@
                                     <option {{ $role->id == Request::get("role_id") ? 'selected="selected"' : '' }}
                                             value="{{ $role->id }}">{{ $role->name }}</option>
                                 @endforeach
+
                             </select>
 
                             <button type="submit"
@@ -197,7 +198,6 @@
                                             </td>
 
                                             <td>
-
                                                 @if($user->photo)
                                                     <img class="img-rounded" style="width:50px"
                                                          src="{{ thumbnail($user->photo->path) }}"/>
@@ -211,7 +211,7 @@
 
                                                 @can("users.edit", $user)
                                                     <a class="text-navy"
-                                                       href="{{ URL::to(ADMIN) }}/users/{{ $user->id }}/edit">
+                                                       href="{{ route("admin.users.edit", ["id" => $user->id]) }}">
                                                         <strong> {{ $user->name }} </strong>
                                                     </a>
                                                 @else
@@ -242,7 +242,7 @@
 
                                                 @can("users.edit", $user)
 
-                                                    <a href="{{ URL::to(ADMIN) }}/users/{{ $user->id }}/edit">
+                                                    <a href="{{ route("admin.users.edit", ["id" => $user->id]) }}">
                                                         <i class="fa fa-pencil text-navy"></i>
                                                     </a>
 
@@ -252,7 +252,7 @@
 
                                                     <a class="delete_user ask"
                                                        message="{{ trans("users::users.sure_delete") }}"
-                                                       href="{{ route("admin.users.delete", array("id" => $user->id)) }}">
+                                                       href="{{ route("admin.users.delete", ["id" => $user->id]) }}">
                                                         <i class="fa fa-times text-navy"></i>
                                                     </a>
 
