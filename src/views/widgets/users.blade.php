@@ -40,9 +40,10 @@
                         </td>
 
                         <td class="text-right">
-                            <small><?php echo !$user->role ?: $user->role->name; ?></small>
+                            <small>{{ $user->role ? $user->role->name : trans("users::users.no_role") }}</small>
                         </td>
                     </tr>
+
                     <?php } ?>
 
                     </tbody>

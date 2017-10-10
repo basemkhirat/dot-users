@@ -234,7 +234,7 @@
 
                                             <td>
                                                 <small>
-                                                    {{ empty($user->role->name) == "" ? $user->role->name: "-" }}
+                                                    {{ $user->role ? $user->role->name : trans("users::users.no_role") }}
                                                 </small>
                                             </td>
 

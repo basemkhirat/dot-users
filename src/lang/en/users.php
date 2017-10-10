@@ -63,7 +63,7 @@ return [
     "color_green" => "Green",
     "color_blue" => "Blue",
 
-    "module" => "Users",
+    "no_role" => "No role",
 
     "permissions" => [
         "show" => "Show users",

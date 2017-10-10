@@ -64,6 +64,8 @@ return [
     "recent_users" => "آخر الأعضاء",
     "show_all" => "عرض الكل",
 
+    "no_role" => "بدون صلاحية",
+
     "permissions" => [
         "show" => "عرض الأعضاء",
         "create" => "إضافة الأعضاء",
