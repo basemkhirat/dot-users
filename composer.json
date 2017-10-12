@@ -20,11 +20,5 @@
         "psr-4": {
             "Dot\\Users\\": "src"
         }
-    },
-
-    "config": {
-        "preferred-install": "dist"
-    },
-
-    "minimum-stability" : "dev"
+    }
 }
