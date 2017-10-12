@@ -48,15 +48,16 @@ class Users extends \Dot\Platform\Plugin
     function registerPolices(){
 
         /**
-         * Users allowed to update:
-         * Super admins are allowed to update all users
-         * Users given permission to update are allowed to update all other users
-         * All users allowed to update their profile
+         * Users allowed to edit:
+         * Super admins are allowed to edit all users
+         * Users given permission to edit are allowed to edit all other users
+         * All users allowed to edit their profile
          */
-        $this->gate->define("users.update", function ($user, $profile) {
+        $this->gate->define("users.edit", function ($user, $profile) {
             return $user->hasRole("superadmin")
-                || $user->id == $profile->id
-                || $user->hasAccess("users.update");
+                || $user->hasAccess("users.update")
+                || $user->id == $profile->id;
+
         });
 
         /**
