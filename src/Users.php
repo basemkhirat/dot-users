@@ -55,7 +55,7 @@ class Users extends \Dot\Platform\Plugin
          */
         $this->gate->define("users.edit", function ($user, $profile) {
             return $user->hasRole("superadmin")
-                || $user->hasAccess("users.update")
+                || $user->hasAccess("users.edit")
                 || $user->id == $profile->id;
 
         });
