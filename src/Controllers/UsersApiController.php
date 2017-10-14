@@ -51,19 +51,9 @@ class UsersApiController extends APIController
 
         $query = User::with($components)->orderBy($sort_by, $sort_direction);
 
-        if ($request->has("q")) {
+        if ($request->filled("q")) {
             $query->search($request->get("q"));
         }
-
-        /*
-        // $q =  json_decode($request->get("query"));
-        //dd($q);
-        //$query->build($q);
-        //{"username": {"$in" : ["admin", "beso"]}}
-        $query->build([
-            "username" => ['$in' => ["ahmed", "basem"]]
-        ]);
-        */
 
         if ($id) {
             $users = $query->where("id", $id)->first();
@@ -107,7 +97,7 @@ class UsersApiController extends APIController
             check if social user
         */
 
-        if ($request->has("provider") and $request->has("provider_id")) {
+        if ($request->filled("provider") and $request->filled("provider_id")) {
 
             $user = User::with("photo")
                 ->where("provider", $request->get("provider"))
@@ -143,13 +133,13 @@ class UsersApiController extends APIController
         $user->photo_id = $request->get("photo_id", 0);
         $user->api_token = $user->newApiToken();
 
-        if ($request->has("photo_data")) {
+        if ($request->filled("photo_data")) {
             $media = new Media();
             $media = $media->saveContent($request->get("photo_data"), NULL, "api");
             $user->photo_id = $media->id;
         }
 
-        if ($request->has("photo_url")) {
+        if ($request->filled("photo_url")) {
             $media = new Media();
             $media = $media->saveLink($request->get("photo_url"), "api");
             $user->photo_id = $media->id;
@@ -236,13 +226,13 @@ class UsersApiController extends APIController
         $user->google_plus = $request->get("google_plus", $user->google_plus);
         $user->photo_id = $request->get("photo_id", $user->photo_id);
 
-        if ($request->has("photo_data")) {
+        if ($request->filled("photo_data")) {
             $media = new Media();
             $media = $media->saveContent($request->get("photo_data"), NULL, "api");
             $user->photo_id = $media->id;
         }
 
-        if ($request->has("photo_url")) {
+        if ($request->filled("photo_url")) {
             $media = new Media();
             $media = $media->saveLink($request->get("photo_url"), "api");
             $user->photo_id = $media->id;

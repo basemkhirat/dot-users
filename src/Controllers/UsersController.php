@@ -9,11 +9,14 @@ use Dot;
 use Dot\Platform\Controller;
 use Dot\Roles\Models\Role;
 use Dot\Users\Models\User;
+use function foo\func;
 use Gate;
 use Redirect;
 use Request;
 use Session;
 use View;
+
+use Dot\Options\Facades\Option;
 
 
 /**
@@ -38,7 +41,7 @@ class UsersController extends Controller
     {
 
         if (Request::isMethod("post")) {
-            if (Request::has("action")) {
+            if (Request::filled("action")) {
                 switch (Request::get("action")) {
                     case "delete":
                         return $this->delete();
@@ -46,32 +49,32 @@ class UsersController extends Controller
             }
         }
 
-        $this->data["sort"] = (Request::has("sort")) ? Request::get("sort") : "created_at";
-        $this->data["order"] = (Request::has("order")) ? Request::get("order") : "desc";
-        $this->data['per_page'] = (Request::has("per_page")) ? Request::get("per_page") : 20;
+        $this->data["sort"] = (Request::filled("sort")) ? Request::get("sort") : "created_at";
+        $this->data["order"] = (Request::filled("order")) ? Request::get("order") : "desc";
+        $this->data['per_page'] = (Request::filled("per_page")) ? Request::get("per_page") : 20;
 
         $query = User::with("role", "photo")->orderBy($this->data["sort"], $this->data["order"]);
 
-        if (Request::has("q")) {
+        if (Request::filled("q")) {
             $q = urldecode(Request::get("q"));
             $query->search($q);
         }
 
-        if (Request::has("per_page")) {
+        if (Request::filled("per_page")) {
             $this->data["per_page"] = $per_page = Request::get("per_page");
         } else {
             $this->data["per_page"] = $per_page = 20;
         }
 
-        if (Request::has("backend") and Request::get("backend") == 1) {
+        if (Request::filled("backend") and Request::get("backend") == 1) {
             $query->where("role_id", "!=", 0);
         }
 
-        if (Request::has("status")) {
+        if (Request::filled("status")) {
             $query->where("status", Request::get("status"));
         }
 
-        if (Request::has("role_id")) {
+        if (Request::filled("role_id")) {
             $query->where("role_id", Request::get("role_id"));
         }
 
