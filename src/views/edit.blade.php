@@ -138,7 +138,9 @@
                                   rows="7">{{ @Request::old("about", $user->about) }}</textarea>
                             </div>
 
-                            <?php Action::render("user.form.featured", $user); ?>
+                            @foreach(Action::fire("user.form.featured") as $output)
+                                {!! $output !!}
+                            @endforeach
 
                         </div>
                     </div>
@@ -226,7 +228,9 @@
                                 </div>
                             </div>
 
-                            <?php Action::render("user.form.side", $user); ?>
+                            @foreach(Action::fire("user.form.sidebar") as $output)
+                                {!! $output !!}
+                            @endforeach
 
                         </div>
                     </div>
@@ -276,7 +280,7 @@
 
 @stop
 
-@push("header")
+@section("head")
 
     <style>
 
@@ -286,9 +290,9 @@
 
     </style>
 
-@endpush
+@stop
 
-@push("footer")
+@section("footer")
 
     <script>
 
@@ -326,4 +330,4 @@
 
     </script>
 
-@endpush
+@stop

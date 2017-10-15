@@ -298,7 +298,7 @@
 
 @stop
 
-@push("footer")
+@section("footer")
 
     <script>
 
@@ -344,4 +344,4 @@
 
     </script>
 
-@endpush
+@stop

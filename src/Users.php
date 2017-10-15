@@ -35,13 +35,12 @@ class Users extends \Dot\Platform\Plugin
         });
 
         Action::listen("dashboard.featured", function () {
-
             if (Auth::user()->can('users')) {
                 $users = User::orderBy("created_at", "DESC")->limit(5)->get();
                 return view("users::widgets.users", ["users" => $users]);
             }
-
         });
+
     }
 
 
