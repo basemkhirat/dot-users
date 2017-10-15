@@ -45,7 +45,8 @@ class Users extends \Dot\Platform\Plugin
     }
 
 
-    function registerPolices(){
+    function registerPolices()
+    {
 
         /**
          * Users allowed to edit:

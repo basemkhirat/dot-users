@@ -55,7 +55,8 @@
                             <select name="sort" class="form-control chosen-select chosen-rtl">
 
                                 @foreach(['created_at', 'first_name'] as $field)
-                                    <option value="{{ $field }}" {{ $sort == $field ? 'selected="selected"' : '' }}>{{ trans("users::users.attributes.".$field) }}</option>
+                                    <option
+                                        value="{{ $field }}" {{ $sort == $field ? 'selected="selected"' : '' }}>{{ trans("users::users.attributes.".$field) }}</option>
                                 @endforeach
 
                             </select>
@@ -63,7 +64,8 @@
                             <select name="order" class="form-control chosen-select chosen-rtl">
 
                                 @foreach(['asc', 'desc'] as $direction)
-                                    <option value="{{ $direction }}" {{  $order == $direction ? 'selected="selected"' : '' }}>{{ trans("users::users.".$direction) }}</option>
+                                    <option
+                                        value="{{ $direction }}" {{  $order == $direction ? 'selected="selected"' : '' }}>{{ trans("users::users.".$direction) }}</option>
                                 @endforeach
 
                             </select>
@@ -158,7 +160,8 @@
                                         </option>
 
                                         @foreach([10, 20, 30, 40] as $num)
-                                            <option value="{{ $num }}" {{ $num == $per_page ? 'selected="selected"' : '' }}>{{ $num }}</option>
+                                            <option
+                                                value="{{ $num }}" {{ $num == $per_page ? 'selected="selected"' : '' }}>{{ $num }}</option>
                                         @endforeach
 
                                     </select>

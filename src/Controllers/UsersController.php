@@ -9,14 +9,11 @@ use Dot;
 use Dot\Platform\Controller;
 use Dot\Roles\Models\Role;
 use Dot\Users\Models\User;
-use function foo\func;
 use Gate;
 use Redirect;
 use Request;
 use Session;
 use View;
-
-use Dot\Options\Facades\Option;
 
 
 /**
@@ -84,6 +81,37 @@ class UsersController extends Controller
         return View::make("users::show", $this->data);
     }
 
+    /**
+     * Delete user by id
+     * @return mixed
+     */
+    public function delete()
+    {
+
+        $ids = Request::get("id");
+
+        $ids = is_array($ids) ? $ids : [$ids];
+
+        foreach ($ids as $ID) {
+
+            $user = User::findOrFail($ID);
+
+            if (!Auth::user()->can("users.delete", $user)) {
+
+                // Fire deleting action
+
+                Action::fire("user.deleting", $user);
+
+                $user->delete();
+
+                // Fire deleted action
+
+                Action::fire("user.deleted", $user);
+            }
+        }
+
+        return Redirect::back()->with("message", trans("users::users.events.deleted"));
+    }
 
     /**
      * Create a new user
@@ -139,7 +167,6 @@ class UsersController extends Controller
         return View::make("users::edit", $this->data);
     }
 
-
     /**
      * Edit user by id
      * @param $user_id
@@ -154,7 +181,7 @@ class UsersController extends Controller
             abort(404);
         }
 
-        if(!Auth::user()->can("users.edit", $user)){
+        if (!Auth::user()->can("users.edit", $user)) {
             abort(403);
         }
 
@@ -207,39 +234,6 @@ class UsersController extends Controller
         $this->data["roles"] = Role::all();
 
         return View::make("users::edit", $this->data);
-    }
-
-
-    /**
-     * Delete user by id
-     * @return mixed
-     */
-    public function delete()
-    {
-
-        $ids = Request::get("id");
-
-        $ids = is_array($ids) ? $ids : [$ids];
-
-        foreach ($ids as $ID) {
-
-            $user = User::findOrFail($ID);
-
-            if(!Auth::user()->can("users.delete", $user)) {
-
-                // Fire deleting action
-
-                Action::fire("user.deleting", $user);
-
-                $user->delete();
-
-                // Fire deleted action
-
-                Action::fire("user.deleted", $user);
-            }
-        }
-
-        return Redirect::back()->with("message", trans("users::users.events.deleted"));
     }
 
 }

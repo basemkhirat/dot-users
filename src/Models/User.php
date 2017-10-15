@@ -2,7 +2,6 @@
 
 namespace Dot\Users\Models;
 
-use Illuminate\Support\Facades\Auth;
 use Dot\Media\Models\Media;
 use Dot\Platform\Model;
 use Dot\Roles\Models\Role;
@@ -14,6 +13,7 @@ use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class User
@@ -158,16 +158,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Check user has specific role
-     * @param $role
-     * @return bool
-     */
-    public function hasRole($role)
-    {
-        return strtolower($role) == strtolower($this->role->name);
-    }
-
-    /**
      * Determine if the entity has a given ability.
      *
      * @param  string $ability
@@ -223,6 +213,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
 
         return false;
+    }
+
+    /**
+     * Check user has specific role
+     * @param $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return strtolower($role) == strtolower($this->role->name);
     }
 
     /**

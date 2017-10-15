@@ -156,8 +156,9 @@
                                         <select class="form-control select2 chosen-rtl" name="role_id">
 
                                             @foreach ($roles as $role)
-                                                <option {{ $user and $user->role_id == $role->id ? 'selected="selected"' : '' }}
-                                                        value="{{ $role->id }}">{{ $role->name }}</option>
+                                                <option
+                                                    {{ $user and $user->role_id == $role->id ? 'selected="selected"' : '' }}
+                                                    value="{{ $role->id }}">{{ $role->name }}</option>
                                             @endforeach
 
                                         </select>
@@ -167,13 +168,14 @@
 
                                 <div class="row form-group">
                                     <label
-                                            class="col-sm-3 control-label">{{ trans("users::users.activation") }}</label>
+                                        class="col-sm-3 control-label">{{ trans("users::users.activation") }}</label>
                                     <div class="col-sm-9">
 
                                         <select class="form-control select2 chosen-rtl" name="status">
 
                                             @foreach([1 => "activated", 0 => "deactivated"] as $status => $title)
-                                                <option value="{{ $status }}" {{ ($user and $user->status == $status) ? 'selected="selected"' : '' }}>{{ trans("users::users.".$title) }}</option>
+                                                <option
+                                                    value="{{ $status }}" {{ ($user and $user->status == $status) ? 'selected="selected"' : '' }}>{{ trans("users::users.".$title) }}</option>
                                             @endforeach
 
                                         </select>
@@ -193,13 +195,14 @@
 
                             <div class="row form-group">
                                 <label
-                                        class="col-sm-3 control-label">{{ trans("users::users.language") }}</label>
+                                    class="col-sm-3 control-label">{{ trans("users::users.language") }}</label>
                                 <div class="col-sm-9">
                                     <select class="form-control select2 chosen-rtl" name="lang">
 
                                         @foreach (config("admin.locales") as $code => $lang)
-                                            <option {{  ((($user and $code == $user->lang) or (!$user and $code == app()->getLocale()))) ? 'selected="selected"' : '' }}
-                                                    value="{{ $code }}">{{ $lang["title"] }}</option>
+                                            <option
+                                                {{  ((($user and $code == $user->lang) or (!$user and $code == app()->getLocale()))) ? 'selected="selected"' : '' }}
+                                                value="{{ $code }}">{{ $lang["title"] }}</option>
                                         @endforeach
 
                                     </select>
@@ -213,8 +216,9 @@
 
                                         @foreach (["blue", "green"] as $color)
 
-                                            <option {{ ($user and $color == $user->color) ? 'selected="selected"' : '' }}
-                                                    value="{{ $color }}">{{ trans("users::users.color_" . $color) }}</option>
+                                            <option
+                                                {{ ($user and $color == $user->color) ? 'selected="selected"' : '' }}
+                                                value="{{ $color }}">{{ trans("users::users.color_" . $color) }}</option>
 
                                         @endforeach
 
