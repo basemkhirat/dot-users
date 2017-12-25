@@ -10,6 +10,10 @@ use Navigation;
 class Users extends \Dot\Platform\Plugin
 {
 
+    protected $dependencies = [
+        "roles" => \Dot\Roles\Roles::class,
+    ];
+
     protected $permissions = [
         "show",
         "create",
