@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 class MakeUsersTable extends Migration
 {
-    /**
+    /*
      * Run the migrations.
      *
      * @return void
@@ -39,7 +39,7 @@ class MakeUsersTable extends Migration
         });
     }
 
-    /**
+    /*
      * Reverse the migrations.
      *
      * @return void

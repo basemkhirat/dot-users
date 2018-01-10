@@ -6,13 +6,13 @@ use Dot\Platform\APIController;
 use Dot\Users\Models\User;
 use Illuminate\Http\Request;
 
-/**
+/*
  * Class UsersApiController
  */
 class UsersApiController extends APIController
 {
 
-    /**
+    /*
      * UsersApiController constructor.
      */
     function __construct(Request $request)
@@ -22,7 +22,7 @@ class UsersApiController extends APIController
     }
 
 
-    /**
+    /*
      * List users
      * @param int $id (optional) The object identifier.
      * @param string $q (optional) The search query string.
@@ -66,7 +66,7 @@ class UsersApiController extends APIController
     }
 
 
-    /**
+    /*
      * Create a new user
      * @param string $username (required) The user name.
      * @param string $password (required) The user password.
@@ -166,7 +166,7 @@ class UsersApiController extends APIController
 
     }
 
-    /**
+    /*
      * Update user by id
      * @param int $id (required) The user id.
      * @param string $username (optional) The user name.
@@ -259,7 +259,7 @@ class UsersApiController extends APIController
 
     }
 
-    /**
+    /*
      * Delete user by id
      * @param int $id (required) The user id.
      * @return \Illuminate\Http\JsonResponse

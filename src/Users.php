@@ -51,7 +51,7 @@ class Users extends \Dot\Platform\Plugin
     function registerPolices()
     {
 
-        /**
+        /*
          * Users allowed to edit:
          * Super admins are allowed to edit all users
          * Users given permission to edit are allowed to edit all other users
@@ -64,7 +64,7 @@ class Users extends \Dot\Platform\Plugin
 
         });
 
-        /**
+        /*
          * Users allowed to delete:
          * Super admins are allowed to delete all users
          * Users given permission to delete are allowed to delete all users

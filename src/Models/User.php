@@ -15,7 +15,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Auth;
 
-/**
+/*
  * Class User
  * @package Dot\Users\Models
  */
@@ -24,7 +24,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     use Authenticatable, Authorizable, CanResetPassword;
 
-    /**
+    /*
      * @var array
      */
     protected $creatingRules = [
@@ -33,7 +33,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         "first_name" => "required"
     ];
 
-    /**
+    /*
      * @var array
      */
     protected $updatingRules = [
@@ -42,24 +42,24 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         "first_name" => "required"
     ];
 
-    /**
+    /*
      * @var array
      */
     protected $searchable = [
         "username", "email", "first_name"
     ];
 
-    /**
+    /*
      * @var string
      */
     protected $table = 'users';
 
-    /**
+    /*
      * @var array
      */
     protected $guarded = ['id', "permission"];
 
-    /**
+    /*
      * Set create validations
      * @param $v
      * @return mixed
@@ -74,7 +74,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
 
-    /**
+    /*
      * Set update validations
      * @param $v
      * @return mixed
@@ -88,7 +88,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $v;
     }
 
-    /**
+    /*
      * Set password attribute
      * @param $password
      */
@@ -101,7 +101,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
     }
 
-    /**
+    /*
      * Set repassword attribute
      * @param $password
      */
@@ -110,7 +110,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         unset($this->attributes["repassword"]);
     }
 
-    /**
+    /*
      * Name getter
      * @return mixed|string
      */
@@ -126,7 +126,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $name;
     }
 
-    /**
+    /*
      * photo relation
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -135,7 +135,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasOne(Media::class, 'id', 'photo_id');
     }
 
-    /**
+    /*
      * Photo url attribute
      * @return string
      */
@@ -148,7 +148,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
     }
 
-    /**
+    /*
      * Role relation
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -157,7 +157,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasOne(Role::class, "id", 'role_id');
     }
 
-    /**
+    /*
      * Determine if the entity has a given ability.
      *
      * @param  string $ability
@@ -173,7 +173,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasAccess($ability);
     }
 
-    /**
+    /*
      * Check user has specific permissions
      * @param array $params
      * @return bool
@@ -215,7 +215,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return false;
     }
 
-    /**
+    /*
      * Check user has specific role
      * @param $role
      * @return bool
@@ -225,7 +225,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return strtolower($role) == strtolower($this->role->name);
     }
 
-    /**
+    /*
      * generate API token
      * @return string
      */

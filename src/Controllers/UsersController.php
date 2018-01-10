@@ -16,21 +16,21 @@ use Session;
 use View;
 
 
-/**
+/*
  * Class UsersController
  * @package Dot\Users\Controllers
  */
 class UsersController extends Controller
 {
 
-    /**
+    /*
      * View payload
      * @var array
      */
     public $data = [];
 
 
-    /**
+    /*
      * Show all users
      * @return mixed
      */
@@ -81,7 +81,7 @@ class UsersController extends Controller
         return View::make("users::show", $this->data);
     }
 
-    /**
+    /*
      * Delete user by id
      * @return mixed
      */
@@ -113,7 +113,7 @@ class UsersController extends Controller
         return Redirect::back()->with("message", trans("users::users.events.deleted"));
     }
 
-    /**
+    /*
      * Create a new user
      * @return mixed
      */
@@ -167,7 +167,7 @@ class UsersController extends Controller
         return View::make("users::edit", $this->data);
     }
 
-    /**
+    /*
      * Edit user by id
      * @param $user_id
      * @return mixed
