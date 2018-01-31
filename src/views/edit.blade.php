@@ -133,7 +133,7 @@
 
                             <br/>
                             <div class="form-group">
-                        <textarea name="about" class="markdown form-control"
+                                <textarea name="about" class="markdown form-control"
                                   placeholder="{{ trans("users::users.about_me") }}"
                                   rows="7">{{ @Request::old("about", $user->about) }}</textarea>
                             </div>
@@ -150,7 +150,7 @@
 
                         <div class="panel-body">
 
-                            @can("roles.manage")
+                            @if(Auth::user()->can("roles.manage", $user))
 
                                 <div class="row form-group">
                                     <label class="col-sm-3 control-label">{{ trans("users::users.role") }}</label>
@@ -166,7 +166,6 @@
                                         </select>
                                     </div>
                                 </div>
-
 
                                 <div class="row form-group">
                                     <label
@@ -188,28 +187,32 @@
                             @else
 
                                 <input type="hidden" name="role_id"
-                                       value="{{ $user->id or 0 }}"/>
+                                       value="{{ $user ? $user->role_id : 0 }}"/>
 
                                 <input type="hidden" name="status"
-                                       value="{{ $user->status or 0 }}"/>
+                                       value="{{ $user ? $user->status : 0 }}"/>
 
                             @endcan
 
-                            <div class="row form-group">
-                                <label
-                                    class="col-sm-3 control-label">{{ trans("users::users.language") }}</label>
-                                <div class="col-sm-9">
-                                    <select class="form-control select2 chosen-rtl" name="lang">
+                            @if(config("i18n.locales"))
+                                <div class="row form-group">
+                                    <label
+                                        class="col-sm-3 control-label">{{ trans("users::users.language") }}</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control select2 chosen-rtl" name="lang">
 
-                                        @foreach (config("admin.locales") as $code => $lang)
-                                            <option
-                                                {{  ((($user and $code == $user->lang) or (!$user and $code == app()->getLocale()))) ? 'selected="selected"' : '' }}
-                                                value="{{ $code }}">{{ $lang["title"] }}</option>
-                                        @endforeach
+                                            @foreach (config("i18n.locales") as $code => $lang)
+                                                <option
+                                                    {{  ((($user and $code == $user->lang) or (!$user and $code == app()->getLocale()))) ? 'selected="selected"' : '' }}
+                                                    value="{{ $code }}">{{ $lang["title"] }}</option>
+                                            @endforeach
 
-                                    </select>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <input type="hidden" name="lang" value="{{ app()->getLocale() }}"/>
+                            @endif
 
                             <div class="row form-group">
                                 <label class="col-sm-3 control-label">{{ trans("users::users.color") }}</label>

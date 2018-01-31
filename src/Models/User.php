@@ -222,7 +222,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function hasRole($role)
     {
-        return strtolower($role) == strtolower($this->role->name);
+        if($this->role) {
+            return strtolower($role) == strtolower($this->role->name);
+        }
+
+        return false;
     }
 
     /*

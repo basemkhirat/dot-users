@@ -20,6 +20,7 @@ use View;
  * Class UsersController
  * @package Dot\Users\Controllers
  */
+
 class UsersController extends Controller
 {
 
@@ -215,10 +216,7 @@ class UsersController extends Controller
             $user->save();
 
             if ($user->id == Auth::user()->id) {
-                $user_lang = $user->lang;
-                if (in_array($user_lang, array_keys(Config::get("admin.locales")))) {
-                    Session::put('locale', $user_lang);
-                }
+                Session::put('locale', $user->lang);
             }
 
             // Fire saved action
