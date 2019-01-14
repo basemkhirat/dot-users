@@ -97,7 +97,7 @@ class UsersController extends Controller
 
             $user = User::findOrFail($ID);
 
-            if (!Auth::user()->can("users.delete", $user)) {
+            if (Auth::user()->can("users.delete", $user)) {
 
                 // Fire deleting action
 
