@@ -134,8 +134,8 @@
                             <br/>
                             <div class="form-group">
                                 <textarea name="about" class="markdown form-control"
-                                  placeholder="{{ trans("users::users.about_me") }}"
-                                  rows="7">{{ @Request::old("about", $user->about) }}</textarea>
+                                          placeholder="{{ trans("users::users.about_me") }}"
+                                          rows="7">{{ @Request::old("about", $user->about) }}</textarea>
                             </div>
 
                             @foreach(Action::fire("user.form.featured") as $output)
@@ -159,7 +159,7 @@
 
                                             @foreach ($roles as $role)
                                                 <option
-                                                    {{ $user and $user->role_id == $role->id ? 'selected="selected"' : '' }}
+                                                    @if($user and $user->role_id == $role->id) selected="selected" @endif
                                                     value="{{ $role->id }}">{{ $role->name }}</option>
                                             @endforeach
 
@@ -176,7 +176,9 @@
 
                                             @foreach([1 => "activated", 0 => "deactivated"] as $status => $title)
                                                 <option
-                                                    value="{{ $status }}" {{ ($user and $user->status == $status) ? 'selected="selected"' : '' }}>{{ trans("users::users.".$title) }}</option>
+                                                    value="{{ $status }}"
+                                                    @if($user and $user->status == $status) selected="selected" @endif
+                                                >{{ trans("users::users.".$title) }}</option>
                                             @endforeach
 
                                         </select>
@@ -220,11 +222,9 @@
                                     <select class="form-control select2 chosen-rtl" name="color">
 
                                         @foreach (["blue", "green"] as $color)
-
                                             <option
-                                                {{ ($user and $color == $user->color) ? 'selected="selected"' : '' }}
+                                                @if($user and $color == $user->color) selected="selected" @endif
                                                 value="{{ $color }}">{{ trans("users::users.color_" . $color) }}</option>
-
                                         @endforeach
 
                                     </select>

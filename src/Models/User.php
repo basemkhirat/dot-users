@@ -14,6 +14,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 /*
  * Class User
@@ -166,7 +167,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function can($ability, $arguments = [])
     {
-        if (count($arguments) > 0) {
+        if ($arguments) {
             return app(Gate::class)->forUser($this)->check($ability, $arguments);
         }
 
@@ -235,7 +236,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     function newApiToken()
     {
-        return str_random(60);
+        return Str::random(60);
     }
 
 }

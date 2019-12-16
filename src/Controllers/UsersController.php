@@ -178,7 +178,7 @@ class UsersController extends Controller
 
         $user = User::with("photo")->where("id", $user_id)->first();
 
-        if (count($user) == 0) {
+        if (!$user) {
             abort(404);
         }
 

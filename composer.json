@@ -13,7 +13,7 @@
     "license": "MIT",
     "type": "package",
     "require": {
-        "dot/platform": "0.4.*",
+        "dot/platform": "0.5.*",
         "dot/roles": "*"
     },
     "autoload": {
