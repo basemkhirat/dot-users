@@ -2,15 +2,15 @@
 
 namespace Dot\Users\Controllers;
 
-use Action;
-use Auth;
+use Dot\Platform\Facades\Action;
+use Illuminate\Support\Facades\Auth;
 use Dot\Platform\Controller;
 use Dot\Roles\Models\Role;
 use Dot\Users\Models\User;
-use Redirect;
-use Request;
-use Session;
-use View;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 
 
 /*

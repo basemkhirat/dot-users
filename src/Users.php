@@ -2,10 +2,10 @@
 
 namespace Dot\Users;
 
-use Action;
+use Dot\Platform\Facades\Action;
 use Dot\Users\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Navigation;
+use Dot\Platform\Facades\Navigation;
 
 class Users extends \Dot\Platform\Plugin
 {

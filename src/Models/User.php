@@ -5,7 +5,7 @@ namespace Dot\Users\Models;
 use Dot\Media\Models\Media;
 use Dot\Platform\Model;
 use Dot\Roles\Models\Role;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
