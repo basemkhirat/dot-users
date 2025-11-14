@@ -1,5 +1,6 @@
 {
     "name": "dot/users",
+    "version": "0.2.7",
     "description": "The users plugin of dot/platform",
     "keywords": [
         "framework",
