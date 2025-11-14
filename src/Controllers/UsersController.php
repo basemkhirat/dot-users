@@ -4,12 +4,9 @@ namespace Dot\Users\Controllers;
 
 use Action;
 use Auth;
-use Config;
-use Dot;
 use Dot\Platform\Controller;
 use Dot\Roles\Models\Role;
 use Dot\Users\Models\User;
-use Gate;
 use Redirect;
 use Request;
 use Session;
